@@ -5,8 +5,8 @@ namespace Dynu.API.Test
 {
     public abstract class TestBase
     {
-        private string clientId = "c4f8efc9-7722-47a1-899a-fd9375a17048";
-        private string secret = "7ShQ6JXD78M9ScpafWWgh1pW6vzRKz";
+        private string clientId = "";
+        private string secret = "";
 
         protected async Task<T> PreAuth<T>() where T : ClientBase, new()
         {
