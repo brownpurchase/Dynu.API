@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DynuDNS\Dynu.API.csproj" />
+    <ProjectReference Include="..\Dynu.API\Dynu.API.csproj" />
   </ItemGroup>
 
 </Project>
