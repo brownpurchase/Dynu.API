@@ -13,8 +13,34 @@
     <description>Dynamic DNS technology allows you to give your home network PC or server a permanent address on the Internet. </description>
     <releaseNotes></releaseNotes>
     <tags>dynu api ddns</tags>
+    <dependencies>
+      <group targetFramework=".NETStandard1.3">
+        <dependency id="Newtonsoft.Json" version="11.0.2"/>
+        <dependency id="JsonSubTypes" version="1.4.0"/>
+      </group>
+      <group targetFramework=".NETStandard1.4">
+        <dependency id="Newtonsoft.Json" version="11.0.2"/>
+        <dependency id="JsonSubTypes" version="1.4.0"/>
+      </group>
+      <group targetFramework=".NETStandard1.5">
+        <dependency id="Newtonsoft.Json" version="11.0.2"/>
+        <dependency id="JsonSubTypes" version="1.4.0"/>
+      </group>
+      <group targetFramework=".NETStandard1.6">
+        <dependency id="Newtonsoft.Json" version="11.0.2"/>
+        <dependency id="JsonSubTypes" version="1.4.0"/>
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Newtonsoft.Json" version="11.0.2"/>
+        <dependency id="JsonSubTypes" version="1.4.0"/>
+      </group>
+    </dependencies>
   </metadata>
   <files>
 	<file src="Dynu.API\bin\$configuration$\netstandard1.3\Dynu.API.dll" target="lib\netstandard1.3\Dynu.API.dll" />
+	<file src="Dynu.API\bin\$configuration$\netstandard1.4\Dynu.API.dll" target="lib\netstandard1.4\Dynu.API.dll" />
+	<file src="Dynu.API\bin\$configuration$\netstandard1.5\Dynu.API.dll" target="lib\netstandard1.5\Dynu.API.dll" />
+	<file src="Dynu.API\bin\$configuration$\netstandard1.6\Dynu.API.dll" target="lib\netstandard1.6\Dynu.API.dll" />
+	<file src="Dynu.API\bin\$configuration$\netstandard2.0\Dynu.API.dll" target="lib\netstandard2.0\Dynu.API.dll" />
   </files>
 </package>
