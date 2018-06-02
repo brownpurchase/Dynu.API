@@ -15,6 +15,6 @@
     <tags>dynu api ddns</tags>
   </metadata>
   <files>
-	<file src="Dynu.API\bin\netstandard1.3\$configuration$\Dynu.API.dll" target="lib\netstandard1.3\Dynu.API.dll" />
+	<file src="Dynu.API\bin\$configuration$\netstandard1.3\Dynu.API.dll" target="lib\netstandard1.3\Dynu.API.dll" />
   </files>
 </package>
