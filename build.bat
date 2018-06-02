@@ -14,5 +14,5 @@ if not "%PackageVersion%" == "" (
 dotnet build Dynu.API.sln -c %config%
 
 cd Dynu.API\bin\Release
-
+@echo %PackageVersion%
 nuget pack "Dynu.API.nuspec" -NoPackageAnalysis -verbosity detailed -o Build -Version %version% -p Configuration="%config%"
