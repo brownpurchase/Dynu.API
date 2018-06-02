@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Dynu.API</id>
+    <version>$version$</version>
+    <title>Dynu API</title>
+    <authors>Telly Brown</authors>
+    <owners>Telly Brown</owners>
+    <licenseUrl>https://github.com/tellybrown/Dynu.API/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/tellybrown/Dynu.API</projectUrl>
+    <iconUrl>https://mygetwwwmain.blob.core.windows.net/feedicons/dynu-api.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Dynamic DNS technology allows you to give your home network PC or server a permanent address on the Internet. </description>
+    <releaseNotes></releaseNotes>
+    <tags>dynu api ddns</tags>
+  </metadata>
+  <files>
+	<file src="Dynu.API\bin\$configuration$\Dynu.API.dll" target="lib\netstandard1.3\Dynu.API.dll" />
+  </files>
+</package>
