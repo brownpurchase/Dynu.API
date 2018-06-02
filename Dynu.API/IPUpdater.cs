@@ -1,6 +1,7 @@
 ﻿using Dynu.API.Model.IPUpdater;
 using System;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Dynu.API
@@ -105,10 +106,19 @@ namespace Dynu.API
         }
         private async Task<string> MakeRequest(string url)
         {
-            using (var client = new WebClient())
+            using (var client = new HttpClient())
             {
                 _Auth.Apply(client, ref url);
-                return await client.DownloadStringTaskAsync(url);
+
+                var msg = await client.GetAsync(url);
+                if (msg.IsSuccessStatusCode)
+                {
+                    return await msg.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    throw new HttpRequestException(msg.ReasonPhrase);
+                }
             }
         }
 
