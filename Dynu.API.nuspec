@@ -14,26 +14,8 @@
     <releaseNotes></releaseNotes>
     <tags>dynu api ddns</tags>
     <dependencies>
-      <group targetFramework=".NETStandard1.3">
-        <dependency id="Newtonsoft.Json" version="11.0.2"/>
-        <dependency id="JsonSubTypes" version="1.4.0"/>
-      </group>
-      <group targetFramework=".NETStandard1.4">
-        <dependency id="Newtonsoft.Json" version="11.0.2"/>
-        <dependency id="JsonSubTypes" version="1.4.0"/>
-      </group>
-      <group targetFramework=".NETStandard1.5">
-        <dependency id="Newtonsoft.Json" version="11.0.2"/>
-        <dependency id="JsonSubTypes" version="1.4.0"/>
-      </group>
-      <group targetFramework=".NETStandard1.6">
-        <dependency id="Newtonsoft.Json" version="11.0.2"/>
-        <dependency id="JsonSubTypes" version="1.4.0"/>
-      </group>
-      <group targetFramework=".NETStandard2.0">
-        <dependency id="Newtonsoft.Json" version="11.0.2"/>
-        <dependency id="JsonSubTypes" version="1.4.0"/>
-      </group>
+      <dependency id="Newtonsoft.Json" version="11.0.2"/>
+      <dependency id="JsonSubTypes" version="1.4.0"/>
     </dependencies>
   </metadata>
   <files>
