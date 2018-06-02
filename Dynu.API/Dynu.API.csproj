@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.3;netstandard1.4;netstandard1.5;netstandard1.6;netstandard2.0</TargetFrameworks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.1.0</Version>
+    <Authors>Telly Brown</Authors>
+    <Company>Telly Brown</Company>
+    <PackageLicenseUrl>https://github.com/tellybrown/Dynu.API/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/tellybrown/Dynu.API</PackageProjectUrl>
+    <PackageIconUrl>https://mygetwwwmain.blob.core.windows.net/feedicons/dynu-api.png</PackageIconUrl>
+    <PackageTags>dynu api ddns</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
