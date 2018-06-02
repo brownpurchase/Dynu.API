@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -7,14 +9,14 @@ namespace Dynu.API.Model.IPUpdater
 {
     public interface IAuth
     {
-        void Apply(WebClient client, ref string url);
+        void Apply(HttpClient client, ref string url);
     }
     public abstract class HashAuth : IAuth
     {
         private readonly string _Username;
         private readonly string _PasswordHash;
-        private readonly string _HashAlgorithm;
-        public HashAuth(string username, byte[] password, string hashAlgorithm)
+        private readonly HashAlgorithm _HashAlgorithm;
+        public HashAuth(string username, byte[] password, HashAlgorithm hashAlgorithm)
         {
             if (username == null)
                 throw new ArgumentNullException("username cannot be null.");
@@ -29,30 +31,27 @@ namespace Dynu.API.Model.IPUpdater
         }
         private string HashPassword(byte[] password)
         {
-            using (var hash = HashAlgorithm.Create(_HashAlgorithm))
-            {
-                var bytes = hash.ComputeHash(password);
+            var bytes = _HashAlgorithm.ComputeHash(password);
 
-                for (int i = 0; i < password.Length; i++)
-                    password[i] = 0;
+            for (int i = 0; i < password.Length; i++)
+                password[i] = 0;
 
-                return BitConverter.ToString(bytes).Replace("-", "");
-            }
+            return BitConverter.ToString(bytes).Replace("-", "");
         }
-        public void Apply(WebClient client, ref string url)
+        public void Apply(HttpClient client, ref string url)
         {
             url += $"&password={_HashAlgorithm}({_PasswordHash})";
         }
     }
     public class MD5Auth : HashAuth
     {
-        public MD5Auth(string username, byte[] password) : base(username, password, "MD5")
+        public MD5Auth(string username, byte[] password) : base(username, password, MD5.Create())
         {
         }
     }
     public class SHA256Auth : HashAuth
     {
-        public SHA256Auth(string username, byte[] password) : base(username, password, "SHA256")
+        public SHA256Auth(string username, byte[] password) : base(username, password, SHA256.Create())
         {
         }
     }
@@ -63,9 +62,10 @@ namespace Dynu.API.Model.IPUpdater
         {
             _Header = Convert.ToBase64String(Encoding.ASCII.GetBytes(username + ":" + password));
         }
-        public void Apply(WebClient client, ref string url)
+        public void Apply(HttpClient client, ref string url)
         {
-            client.Headers.Add("Authorization", "Basic " + _Header);
+            client.DefaultRequestHeaders
+             .Authorization = new AuthenticationHeaderValue("Basic", _Header);
         }
     }
 }
