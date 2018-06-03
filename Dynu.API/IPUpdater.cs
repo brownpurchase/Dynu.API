@@ -1,4 +1,4 @@
-﻿using Dynu.API.Model.IPUpdater;
+using Dynu.API.Model.IPUpdater;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -12,33 +12,14 @@ namespace Dynu.API
         private const string NIC_PATH = "/nic/update";
         private const string ETRN_PATH = "/etrn/update";
 
-        private readonly IAuth _Auth;
-        private readonly PortOption _PortOption;
-        private readonly string PROTOCOL;
+        private readonly IPUpdaterOptionsBuilder _Options;
 
-        public enum PortOption
+        public IPUpdater(IPUpdaterOptionsBuilder options)
         {
-            Port443,
-            Port80,
-            Port8245
-        }
-        public IPUpdater(IAuth auth, PortOption portOption)
-        {
-            _Auth = auth;
-            _PortOption = portOption;
-            switch (_PortOption)
-            {
-                case PortOption.Port443:
-                    PROTOCOL = "https";
-                    break;
-                case PortOption.Port80:
-                case PortOption.Port8245:
-                    PROTOCOL = "http";
-                    break;
-            }
-        }
-        public IPUpdater(IAuth auth) : this(auth, PortOption.Port443)
-        {
+            if (options == null)
+                throw new ArgumentNullException("options cannot be null.");
+
+            _Options = options;
         }
 
         /// <summary>
@@ -54,7 +35,7 @@ namespace Dynu.API
                 throw new ArgumentNullException("criteria cannot be null.");
 
             string updated = (ipv4address == null ? "" : $"&myip={ipv4address}") + (ipv6address == null ? "" : $"&myipv6={ipv6address}");
-            string url = $"{PROTOCOL}://{HOST}{NIC_PATH}?{criteria.QueryString}{updated}";
+            string url = $"{_Options.Protocol}://{HOST}{NIC_PATH}?{criteria.QueryString}{updated}";
             return await MakeRequest(url);
         }
 
@@ -74,7 +55,7 @@ namespace Dynu.API
                 throw new ArgumentNullException("alias cannot be null.");
 
             string updated = (ipv4address == null ? "" : $"&myip={ipv4address}") + (ipv6address == null ? "" : $"&myipv6={ipv6address}");
-            string url = $"{PROTOCOL}://{HOST}{NIC_PATH}?hostname={hostname}&alias={alias}{updated}";
+            string url = $"{_Options.Protocol}://{HOST}{NIC_PATH}?hostname={hostname}&alias={alias}{updated}";
             return await MakeRequest(url);
         }
         /// <summary>
@@ -89,7 +70,7 @@ namespace Dynu.API
                 throw new ArgumentNullException("hostname cannot be null.");
 
             string status = offline ? "yes" : "no";
-            string url = $"{PROTOCOL}://{HOST}{NIC_PATH}?hostname={hostname}&offline={status}";
+            string url = $"{_Options.Protocol}://{HOST}{NIC_PATH}?hostname={hostname}&offline={status}";
             return await MakeRequest(url);
         }
         /// <summary>
@@ -101,14 +82,15 @@ namespace Dynu.API
         /// <param name="port"> The port number on which the primary email server is running. If your ISP is blocking inbound port 25, we recommend that you run your email server on a non-standard port such as 26 or 2525. </param>
         public async Task<string> EmailRouteUpdate(string hostname, string ipaddress, int port)
         {
-            string url = $"{PROTOCOL}://{HOST}{ETRN_PATH}?hostname={hostname}&myip={ipaddress}&port={port}";
+            string url = $"{_Options.Protocol}://{HOST}{ETRN_PATH}?hostname={hostname}&myip={ipaddress}&port={port}";
             return await MakeRequest(url);
         }
         private async Task<string> MakeRequest(string url)
         {
             using (var client = new HttpClient())
             {
-                _Auth.Apply(client, ref url);
+                _Options.Authentication.Apply(client, ref url);
+                client.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue(_Options.UserAgent));
 
                 var msg = await client.GetAsync(url);
                 if (msg.IsSuccessStatusCode)
