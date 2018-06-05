@@ -36,7 +36,7 @@ namespace Dynu.API
 
             string updated = (ipv4address == null ? "" : $"&myip={ipv4address}") + (ipv6address == null ? "" : $"&myipv6={ipv6address}");
             string url = $"{_Options.Protocol}://{HOST}{NIC_PATH}?{criteria.QueryString}{updated}";
-            return await MakeRequest(url);
+            return await MakeRequest(url).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Dynu.API
 
             string updated = (ipv4address == null ? "" : $"&myip={ipv4address}") + (ipv6address == null ? "" : $"&myipv6={ipv6address}");
             string url = $"{_Options.Protocol}://{HOST}{NIC_PATH}?hostname={hostname}&alias={alias}{updated}";
-            return await MakeRequest(url);
+            return await MakeRequest(url).ConfigureAwait(false);
         }
         /// <summary>
         /// This action is used when the server/router is going offline and would like to point the domain name to an offline message or offline URL. The offline action itself can be setup in the control panel . 
@@ -71,7 +71,7 @@ namespace Dynu.API
 
             string status = offline ? "yes" : "no";
             string url = $"{_Options.Protocol}://{HOST}{NIC_PATH}?hostname={hostname}&offline={status}";
-            return await MakeRequest(url);
+            return await MakeRequest(url).ConfigureAwait(false);
         }
         /// <summary>
         /// This action is used to inform Dynu email servers to route emails for a given domain name to its primary email server. The mode of email service in the control panel should be setup as 'Email Store/Forward'. 
@@ -83,19 +83,26 @@ namespace Dynu.API
         public async Task<string> EmailRouteUpdate(string hostname, string ipaddress, int port)
         {
             string url = $"{_Options.Protocol}://{HOST}{ETRN_PATH}?hostname={hostname}&myip={ipaddress}&port={port}";
-            return await MakeRequest(url);
+            return await MakeRequest(url).ConfigureAwait(false);
+        }
+        private HttpClient CreateClient()
+        {
+            if (_Options.Handler != null)
+                return new HttpClient(_Options.Handler, false);
+            else
+                return new HttpClient();
         }
         private async Task<string> MakeRequest(string url)
         {
-            using (var client = new HttpClient())
+            using (var client = CreateClient())
             {
                 _Options.Authentication.Apply(client, ref url);
                 client.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue(_Options.UserAgent));
 
-                var msg = await client.GetAsync(url);
+                var msg = await client.GetAsync(url).ConfigureAwait(false);
                 if (msg.IsSuccessStatusCode)
                 {
-                    return await msg.Content.ReadAsStringAsync();
+                    return await msg.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
                 else
                 {

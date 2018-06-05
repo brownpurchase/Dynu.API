@@ -16,7 +16,7 @@ namespace Dynu.API
         public async Task<Model.Authenticate> AuthenticateAsync(string clientId, string secret)
         {
             var client = CreateAuthenticationClient(clientId, secret);
-            var ret = await Post<Model.Authenticate>("oauth2/token", "grant_type=client_credentials", "application/x-www-form-urlencoded", () => client);
+            var ret = await Post<Model.Authenticate>("oauth2/token", "grant_type=client_credentials", "application/x-www-form-urlencoded", () => client).ConfigureAwait(false);
 
             if(!string.IsNullOrEmpty(ret.accessToken))
             {
@@ -27,17 +27,17 @@ namespace Dynu.API
         }
         public async Task<Model.Ping> PingAsync()
         {
-            return await Post<Model.Ping>("ping", "", "application/json", AuthenticatedClient);
+            return await Post<Model.Ping>("ping", "", "application/json", AuthenticatedClient).ConfigureAwait(false);
         }
 
         protected async Task<T> Post<T>(string url, string data, string contentType, Func<HttpClient> factory)
         {
             using (var client = factory())
             {
-                var msg = await client.PostAsync($"{PROTOCOL}://{HOST}/{VERSION}/{url}", new StringContent(data, Encoding.UTF8, contentType));
+                var msg = await client.PostAsync($"{PROTOCOL}://{HOST}/{VERSION}/{url}", new StringContent(data, Encoding.UTF8, contentType)).ConfigureAwait(false);
                 if (msg.IsSuccessStatusCode)
                 {
-                    string json = await msg.Content.ReadAsStringAsync();
+                    string json = await msg.Content.ReadAsStringAsync().ConfigureAwait(false);
                     return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json);
                 }
                 else
@@ -50,10 +50,10 @@ namespace Dynu.API
         {
             using (var client = factory())
             {
-                var msg = await client.GetAsync($"{PROTOCOL}://{HOST}/{VERSION}/{url}");
+                var msg = await client.GetAsync($"{PROTOCOL}://{HOST}/{VERSION}/{url}").ConfigureAwait(false);
                 if (msg.IsSuccessStatusCode)
                 {
-                    string json = await msg.Content.ReadAsStringAsync();
+                    string json = await msg.Content.ReadAsStringAsync().ConfigureAwait(false);
                     return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json);
                 }
                 else
@@ -66,10 +66,10 @@ namespace Dynu.API
         {
             using (var client = factory())
             {
-                var msg = await client.DeleteAsync($"{PROTOCOL}://{HOST}/{VERSION}/{url}");
+                var msg = await client.DeleteAsync($"{PROTOCOL}://{HOST}/{VERSION}/{url}").ConfigureAwait(false);
                 if (msg.IsSuccessStatusCode)
                 {
-                    string json = await msg.Content.ReadAsStringAsync();
+                    string json = await msg.Content.ReadAsStringAsync().ConfigureAwait(false);
                     return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json);
                 }
                 else
@@ -105,17 +105,5 @@ namespace Dynu.API
 
             return client;
         }
-
-        //private void AddHeaders(HttpClient client, Dictionary<string, string> headers)
-        //{
-        //    if (headers != null && client != null)
-        //    {
-        //        Dictionary<string, string>.Enumerator e = headers.GetEnumerator();
-        //        while (e.MoveNext())
-        //        {
-        //            client...Add(e.Current.Key, e.Current.Value);
-        //        }
-        //    }
-        //}
     }
 }
