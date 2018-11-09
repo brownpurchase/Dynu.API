@@ -26,8 +26,8 @@ namespace Dynu.API.Model.IPUpdater
                 throw new ArgumentNullException("hash algorithm cannot be null.");
 
             _Username = username;
-            _PasswordHash = HashPassword(password);
             _HashAlgorithm = hashAlgorithm;
+            _PasswordHash = HashPassword(password);
         }
         private string HashPassword(byte[] password)
         {
@@ -40,7 +40,7 @@ namespace Dynu.API.Model.IPUpdater
         }
         public void Apply(HttpClient client, ref string url)
         {
-            url += $"&password={_HashAlgorithm}({_PasswordHash})";
+            url += $"&password={_PasswordHash}";
         }
     }
     public class MD5Auth : HashAuth
