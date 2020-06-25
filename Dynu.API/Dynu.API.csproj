@@ -11,7 +11,15 @@
     <PackageIconUrl>https://mygetwwwmain.blob.core.windows.net/feedicons/dynu-api.png</PackageIconUrl>
     <Description>Dynamic DNS technology allows you to give your home network PC or server a permanent address on the Internet. Internet service providers change your IP address on a regular basis, but with dynamic DNS you can keep your domain name pointed to the current IP address of your home server or other devices.</Description>
     <PackageTags>dynu api ddns</PackageTags>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="JsonSubTypes" Version="1.4.0" />
